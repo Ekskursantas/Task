@@ -1,14 +1,11 @@
 const fetch = require('node-fetch');
 
-async function retrieveCommissionInfor(url) {
-    await fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            return data;
-        })
-        .catch(err => {
-            console.log("Error", err)
-        })
+async function retrieveCommissionInfo(url) {
+    const response = await fetch(url).catch(err => {
+        console.log("Error", err)
+    });
+    return await response.json();
+
 }
 
-module.exports = retrieveCommissionInfor;
+module.exports = retrieveCommissionInfo;
