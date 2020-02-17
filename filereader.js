@@ -2,11 +2,15 @@ const fs = require('fs');
 
 
 
-function readArgFile() {
-    const fileNames = process.argv.splice(2);
-
-    if (fileNames.length <= 0) return false;
-    const readFiles = fs.readFileSync(fileNames[0], 'utf8');
+function readArgFile(fileNames) {
+    let readFiles;
+    try {
+        readFiles = fs.readFileSync(fileNames[0], 'utf8');
+    } catch (e) {
+        console.error("File does not exist");
+        return false;
+    }
     return JSON.parse(readFiles);
+
 }
 module.exports = readArgFile;

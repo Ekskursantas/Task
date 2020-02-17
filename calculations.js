@@ -19,6 +19,9 @@ async function calculateCommissions(fileResults) {
 
     const calculatedCommissionList = fileResults.map(entry => {
         if (entry.type == "cash_in") {
+            if (entry.operation.currency !== cashInProtocol.max.currency) {
+                throw `Wrong currency, requested ${cashInProtocol.max.currency}`
+            }
             const commisionFee = entry.operation.amount * cashInProtocol.percents / 100;
             if (commisionFee > cashInProtocol.max.amount) {
                 return cashInProtocol.max.amount.toFixed(2);
@@ -26,6 +29,9 @@ async function calculateCommissions(fileResults) {
                 return roundUp(commisionFee);
             }
         } else if (entry.type == "cash_out" && entry.user_type == "natural") {
+            if (entry.operation.currency !== cashoutNaturalProtocol.week_limit.currency) {
+                throw `Wrong currency, requested ${cashoutNaturalProtocol.week_limit.currency}`
+            }
             let user = naturalUsers.filter(natural => (natural.user_id === entry.user_id))[0];
             if (!user) {
                 user = {
@@ -69,11 +75,14 @@ async function calculateCommissions(fileResults) {
 
 
         } else if (entry.type == "cash_out" && entry.user_type == "juridical") {
+            if (entry.operation.currency !== cashoutLegalProtocol.min.currency) {
+                throw `Wrong currency, requested ${cashoutLegalProtocol.min.currency}`
+            }
             const commisionFee = entry.operation.amount * cashoutLegalProtocol.percents / 100;
             if (commisionFee > cashoutLegalProtocol.min.amount) {
                 return roundUp(commisionFee);
             } else {
-                return "Request canceled. The amount is too small";
+                throw "Request canceled. The amount is too small";
             }
         }
     })

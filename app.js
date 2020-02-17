@@ -2,11 +2,13 @@ const readfile = require("./filereader");
 const calculate = require("./calculations");
 
 async function start() {
-    const fileResults = readfile();
-    if (fileResults) {
+    const arg = process.argv.splice(2);
+    const fileResults = readfile(arg);
+    if (!fileResults) return;
+    try {
         calculate(fileResults);
-    } else {
-        console.log("You have not inputed a list file");
+    } catch (e) {
+        console.error(e);
     }
 }
 
