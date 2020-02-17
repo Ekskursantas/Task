@@ -38,7 +38,7 @@ function cashinCalculation(entry, cashInProtocol) {
     }
     const commisionFee = entry.operation.amount * cashInProtocol.percents / 100;
     if (commisionFee > cashInProtocol.max.amount) {
-        return cashInProtocol.max.amount.toFixed(2);
+        return cashInProtocol.max.amount.toFixed(2); //addind two decimal places after the comma.
     } else {
         return roundUp(commisionFee);
     }
@@ -60,11 +60,11 @@ function cashoutNaturalCalculation(entry, cashoutNaturalProtocol, naturalUsers) 
 
     let deductedAmount = 0;
     const newTranscation = new Date(entry.date);
-    const lastTransactionWeek = (new Date).getWeekNumber(user.lastTransaction);
+    const lastTransactionWeek = (new Date).getWeekNumber(user.lastTransaction); //calculating the week number
     const newTransactionWeek = (new Date).getWeekNumber(newTranscation);
 
     if (lastTransactionWeek != newTransactionWeek ||
-        (lastTransactionWeek == newTransactionWeek && user.lastTransaction.getFullYear() != newTranscation.getFullYear())) {
+        (lastTransactionWeek == newTransactionWeek && user.lastTransaction.getFullYear() != newTranscation.getFullYear())) { //checking if the week number is the same, but has different year
         deductedAmount = entry.operation.amount - cashoutNaturalProtocol.week_limit.amount;
         if (deductedAmount > 0) {
             user.amountLeft = 0;
@@ -74,7 +74,7 @@ function cashoutNaturalCalculation(entry, cashoutNaturalProtocol, naturalUsers) 
         }
     } else {
         deductedAmount = entry.operation.amount - user.amountLeft;
-        if (deductedAmount > 0) {
+        if (deductedAmount > 0) { //if deducted sum is negative that means that the amout free of charge is greater and the result is the left amout of free of charge sum, so we abs it to make it possitive.
             user.amountLeft = 0;
         } else {
             user.amountLeft = Math.abs(deductedAmount);
