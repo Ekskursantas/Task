@@ -1,5 +1,5 @@
 const readfile = require("./filereader");
-const calculate = require("./calculations");
+const calculate = require("./calculations").calculateCommissions;
 
 async function start() {
     const arg = process.argv.splice(2);
@@ -8,6 +8,7 @@ async function start() {
     try {
         calculate(fileResults);
     } catch (e) {
+
         console.error(e);
     }
 }

@@ -7,7 +7,7 @@ function readArgFile(fileNames) {
     try {
         readFiles = fs.readFileSync(fileNames[0], 'utf8');
     } catch (e) {
-        console.error("File does not exist");
+        write("File does not exist");
         return false;
     }
     return JSON.parse(readFiles);
